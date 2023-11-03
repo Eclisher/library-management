@@ -32,7 +32,9 @@ paths:
               to: 
                 type: string
                 format: date
-         # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31     
+         # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31          
+
+
       responses:
         200:
           description: The list of filtered books
@@ -62,8 +64,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/Book'
   /authors:
-    #TODO2: complete GET (can be filtered by name) - PUT - DELETE
-    get:
+    get: 
+  #TODO2: complete GET (can be filtered by name) - PUT - DELETE
       summary: Get all authors
       description: Get a list of all authors
       operationId: getAuthors
@@ -123,7 +125,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/author'
+                  $ref: '#/components/schemas/author'          
 
 components:
   schemas:
@@ -144,19 +146,17 @@ components:
             - OTHER
         releaseDate:
           type: string
-          format: date
-          
+          format: date          
     author:
-          #TODO1: set it as a component with properties : id, name, sex (M or F)
-          type: object
-          properties:
-            id: 
-              type: string
-            name:
-              type: string
-            sex:
-              type: string
-              enum:
-                - Male
-                - Female          
-
+      type: string
+#TODO1: set it as a component with properties : id, name, sex (M or F)
+      properties:
+        id: 
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+            - Male
+            - Female
