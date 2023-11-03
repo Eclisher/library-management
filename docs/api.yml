@@ -19,6 +19,21 @@ paths:
           schema:
             type: string
         #TODO3: add parameter to filter books by intervals of dates of the releaseDate
+        - in: query
+          name: releaseDateRange
+          description: Filter books by release date range
+          required: false
+          schema:
+            type: object
+            properties:
+              from: 
+                type: string
+                format: date
+              to: 
+                type: string
+                format: date
+         # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31     
+        
       responses:
         200:
           description: The list of filtered books
