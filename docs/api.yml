@@ -33,7 +33,6 @@ paths:
                 type: string
                 format: date
          # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31     
-        
       responses:
         200:
           description: The list of filtered books
@@ -63,7 +62,69 @@ paths:
                 items:
                   $ref: '#/components/schemas/Book'
   /authors:
-  #TODO2: complete GET (can be filtered by name) - PUT - DELETE
+    #TODO2: complete GET (can be filtered by name) - PUT - DELETE
+    get:
+      summary: Get all authors
+      description: Get a list of all authors
+      operationId: getAuthors
+      parameters:
+        - in: query
+          name: authorName
+          description: Filter authors by name
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/author'         
+
+    put:
+      summary: Create or update authors 
+      operationId: createAndUpdateTheAuthors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/author'
+
+      responses:
+        200:
+          description: list of created or updates authors 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/author'        
+    delete:
+      summary: Delete authors
+      operationId: deleteTheAuthors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+
+      responses:
+        200: 
+          description: List of the Authors is deleted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/author'
+
 components:
   schemas:
     Book:
