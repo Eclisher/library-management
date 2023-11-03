@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Library API
   version: 1.0.0
-  description: STD22001
+  description: STD22007
 servers:
   - url: https://library.com
 paths:
@@ -33,8 +33,6 @@ paths:
                 type: string
                 format: date
          # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31          
-
-
       responses:
         200:
           description: The list of filtered books
