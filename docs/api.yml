@@ -235,20 +235,6 @@ paths:
                   $ref: '#/components/schemas/Book'
 components:
   schemas:
-    CrupdateTopic:
-      type: object
-      properties:
-        topicName:
-          type: string
-          example: 'Romance'
-    Topic:
-      type: object
-      allOf:
-        - properties:
-            id:
-              type: string
-        - $ref: '#/components/schemas/CrupdateTopic' 
-
     CrupdateBook:
       type: object
       properties:
@@ -256,9 +242,16 @@ components:
           type: string  
         pageNumbers:
           type: integer
+        topic:
+          type: string
+          enum:
+            - ROMANCE
+            - COMEDY
+            - OTHER          
         releaseDate:
           type: string
           format: date
+
 
     Book:
       type: object
@@ -268,10 +261,7 @@ components:
               type: string
             author:
               allOf:
-                - $ref: '#/components/schemas/author'
-            Topic:
-              allOf:
-                - $ref: '#/components/schemas/Topic'                
+                - $ref: '#/components/schemas/author'                
         - $ref: '#/components/schemas/CrupdateBook'
     author:
       type: object
