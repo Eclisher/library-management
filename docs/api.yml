@@ -2,12 +2,14 @@ openapi: 3.0.3
 info:
   title: Library API
   version: 1.0.0
-  description: STD22007
+  description: STD22001
 servers:
   - url: https://library.com
 paths:
   /books:
     get:
+      tags:
+        - "Books"
       summary: Get all books
       description: The returned books are ordered by updated datetime.
       operationId: getBooks
@@ -33,6 +35,8 @@ paths:
                 type: string
                 format: date
          # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31          
+
+
       responses:
         200:
           description: The list of filtered books
@@ -43,8 +47,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/Book'
     put:
+      tags:
+        - "Books"
       summary: Create or update a list of books
-      operationId: crupdateBooks
+      operationId: CrupdateBook
       requestBody:
         content:
           application/json:
@@ -60,9 +66,35 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: '#/components/schemas/CrupdateBook'
+
+    delete: 
+        tags:
+          - "Books"
+        summary: Remove a books by Id
+        operationId: deleteBooks
+        parameters:
+          - in: query
+            name: id
+            description: remove book by given Id
+            required: true
+            schema: 
+              type: string
+        responses:
+          200: 
+            description: Confirmation the book is delete
+            content:
+              application/txt:
+                schema:
+                  type: string
+                  example: "The book with id=1 removed authors are ordered by name"
+
+          
   /authors:
-    get: 
+
+    get:
+      tags:
+        - "Authors"
   #TODO2: complete GET (can be filtered by name) - PUT - DELETE
       summary: Get all authors
       description: Get a list of all authors
@@ -85,6 +117,8 @@ paths:
                   $ref: '#/components/schemas/author'         
 
     put:
+      tags:
+        - "Authors"
       summary: Create or update authors 
       operationId: createAndUpdateTheAuthors
       requestBody:
@@ -105,6 +139,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/author'        
     delete:
+      tags:
+        - "Authors"
       summary: Delete authors
       operationId: deleteTheAuthors
       requestBody:
@@ -125,36 +161,85 @@ paths:
                 items:
                   $ref: '#/components/schemas/author'          
 
+  /books/{bookId}/authors/{authorId}:
+    put: 
+      tags:
+        - "Books"
+      summary: Associate a single book to one author
+      parameters:
+        - name: bookId
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: authorId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: the Update book
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /books/authors:
+    put:
+      tags:
+        - "Books"
+      summary: Modify author for a book by ID
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Book'
+      responses:
+        200:
+          description: The Update the books by Authors
+          content:
+            application/json:
+              schema: 
+                items:
+                  $ref: '#/components/schemas/Book'
 components:
   schemas:
+    CrupdateBook:
+      type: object
+      properties:
+        bookName:
+          type: string  
+        pageNumbers:
+          type: integer
+        releaseDate:
+          type: string
+          format: date
+
     Book:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+            author:
+              allOf:
+                - $ref: '#/components/schemas/author'
+        - $ref: '#/components/schemas/CrupdateBook'
+    author:
       type: object
       properties:
         id:
-          type: string
-        bookName:
-          type: string
-        pageNumbers:
-          type: integer
-        topic:
-          type: string
-          enum:
-            - ROMANCE
-            - COMEDY
-            - OTHER
-        releaseDate:
-          type: string
-          format: date          
-    author:
-      type: string
-#TODO1: set it as a component with properties : id, name, sex (M or F)
-      properties:
-        id: 
-          type: string
+          type: string  
         name:
           type: string
         sex:
           type: string
           enum:
             - Male
+            - Female
             - Female
