@@ -35,7 +35,20 @@ paths:
                 type: string
                 format: date
          # Example: /books?releaseDateRange.from=2023-01-01&releaseDateRange.to=2023-12-31          
-
+        - in: query
+          name: page
+          description: Page number for pagination
+          required: false
+          schema: 
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: number of items per page 
+          required: false
+          schema: 
+            type: integer
+            default: 50 #valeur par défaut pour pageSize
 
       responses:
         200:
@@ -260,7 +273,7 @@ components:
             - Male
             - Female
             - Female
-            
+
     UpdateBookAuthor:
       type: object
       properties:
