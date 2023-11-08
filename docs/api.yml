@@ -51,14 +51,15 @@ paths:
             default: 50 #valeur par défaut pour pageSize
 
       responses:
-        200:
-          description: The list of filtered books
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Book'
+        '200':
+          $ref: '#/components/responses/SpecificResponse200'
+        '400':
+          $ref: '#/components/responses/SpecificResponse400'
+        '403':
+          $ref: '#/components/responses/SpecificResponse403'
+        '500':
+          $ref: '#/components/responses/SpecificResponse500'            
+
     put:
       tags:
         - "Books"
@@ -186,16 +187,16 @@ paths:
           required: false
           schema: 
             type: integer
-            default: 50
       responses:
-        200:
-          description: List of authors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/author'         
+        '200':
+          $ref: '#/components/responses/SpecificResponse200ForAuthors'
+        '400':
+          $ref: '#/components/responses/SpecificResponse400'
+        '403':
+          $ref: '#/components/responses/SpecificResponse403'
+        '500':
+          $ref: '#/components/responses/SpecificResponse500'            
+    
 
     put:
       tags:
@@ -496,4 +497,107 @@ components:
       description: Page number for pagination
       required: true
       schema:
-        type: integer             
+        type: integer
+
+  responses:
+      DefaultResponse:
+        description: Default responses
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                    message:
+                      type: string
+                body:
+                  type: object    
+      SpecificResponse200:
+        description: Page successfully processed
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/responses/DefaultResponse'
+                - type: object
+                - properties:
+                    status:
+                      properties:
+                        code:
+                          default: 200
+                        message:
+                          default: "Success"
+                    body:
+                      $ref: '#/components/schemas/Book'
+      SpecificResponse200ForAuthors:
+        description: Page successfully processed
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/responses/DefaultResponse'
+                - type: object
+                - properties:
+                    status:
+                      properties:
+                        code:
+                          default: 200
+                        message:
+                          default: "Success"
+                    body:
+                      $ref: '#/components/schemas/author'
+
+
+      SpecificResponse400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/responses/DefaultResponse'
+                - type: object
+                - properties:
+                    status:
+                      properties:
+                        code:
+                          default: 400
+                        message:
+                          default: "Bad Request"
+
+      SpecificResponse403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/responses/DefaultResponse'
+                - type: object
+                - properties:
+                    status:
+                      type: object
+                      properties:
+                        code:
+                          default: 403
+                        message:
+                          default: "Forbidden"
+
+      SpecificResponse500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/responses/DefaultResponse'
+                - type: object
+                - properties:
+                    status:
+                      properties:
+                        code:
+                          default: 500
+                        message:
+                          default: "Internal Server Error"                                                                 
+                                         
