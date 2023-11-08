@@ -179,13 +179,7 @@ paths:
           required: false
           schema:
             type: string
-        - in: query
-          name: page
-          description: page number for pagination
-          required: false
-          schema:
-            type: integer
-            default: 1
+        - $ref: '#/components/parameters/queryPagination'            
         - in: query
           name: pageSize
           description: Number of items per page
@@ -359,7 +353,33 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Topic'                                                   
+                  $ref: '#/components/schemas/Topic'  
+  /authorTopics:
+    get:
+      tags:
+        - "Authors"
+        - "Topics"
+      summary: Get all topics associated with an author
+      operationId: getAuthorTopics
+      parameters:
+        - $ref: '#/components/parameters/queryPagination' 
+        - in: query
+          name: authorId
+          description: ID of the author
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of topics associated with the author
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/author'
+                    - $ref: '#/components/schemas/Topic'                                                                   
 components:
   schemas:
     CrupdateTopic:
@@ -469,6 +489,7 @@ components:
       schema:
         type: integer
         default: 1
+
     pathPagination:
       name: page
       in: path
