@@ -51,13 +51,13 @@ paths:
             default: 50 #valeur par défaut pour pageSize
 
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/SpecificResponse200'
-        '400':
+        400:
           $ref: '#/components/responses/SpecificResponse400'
-        '403':
+        403:
           $ref: '#/components/responses/SpecificResponse403'
-        '500':
+        500:
           $ref: '#/components/responses/SpecificResponse500'            
 
     put:
@@ -102,6 +102,29 @@ paths:
                 schema:
                   type: string
                   example: "The book with id=1 removed authors are ordered by name"
+  /books/import:
+    post:
+      tags:
+        - "Books"
+      summary: Import books from Excel or JSON
+      operationId: importBooks
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excelFile:
+                  type: string
+                  format: binary
+                  description: Excel file containing book data
+                jsonFile:
+                  type: string
+                  format: binary
+                  description: JSON file containing book data
+      responses:
+        200:
+          $ref: '#/components/responses/SpecificResponse200'               
 
   /books/{bookId}/topics/{topicId}:
     put:
@@ -188,13 +211,13 @@ paths:
           schema: 
             type: integer
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/SpecificResponse200ForAuthors'
-        '400':
+        400:
           $ref: '#/components/responses/SpecificResponse400'
-        '403':
+        403:
           $ref: '#/components/responses/SpecificResponse403'
-        '500':
+        500:
           $ref: '#/components/responses/SpecificResponse500'            
     
 
@@ -289,6 +312,30 @@ paths:
               schema: 
                 items:
                   $ref: '#/components/schemas/Book'
+  /authors/import:
+    post:
+      tags:
+        - "Authors"
+      summary: Import authors from Excel or JSON
+      operationId: importAuthors
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excelFile:
+                  type: string
+                  format: binary
+                  description: Excel file containing author data
+                jsonFile:
+                  type: string
+                  format: binary
+                  description: JSON file containing author data
+      responses:
+        200:
+          $ref: '#/components/responses/SpecificResponse200ForAuthors'      
+              
   /topics:
     get:
       tags:
