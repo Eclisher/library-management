@@ -110,6 +110,10 @@ paths:
       operationId: importBooks
       requestBody:
         content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ImportBook'
           multipart/form-data:
             schema:
               type: object
@@ -319,7 +323,11 @@ paths:
       summary: Import authors from Excel or JSON
       operationId: importAuthors
       requestBody:
-        content:
+       content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ImportAuthor'
           multipart/form-data:
             schema:
               type: object
@@ -527,7 +535,40 @@ components:
           description: ID of the book
         authorId:
           type: string
-          description: ID of the author            
+          description: ID of the author
+          
+    ImportAuthor:
+      type: object
+      properties:
+        authorName:
+          type: string
+        sex:
+          type: string
+          enum:
+            - Male
+            - Female
+            - Other
+    ImportBook:
+      type: object
+      properties:
+        bookName:
+          type: string
+        author:
+          $ref: '#/components/schemas/author'
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+            - ROMANCE
+            - COMEDY
+            - OTHER
+        releaseDate:
+          type: string
+          format: date
+        idAuthor:
+          type: string
+
   parameters:
     queryPagination:
       name: page
