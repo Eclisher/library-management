@@ -9,10 +9,6 @@ https://library.com
 ```sh
 https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Eclisher/library-management/oas-td2-std22007/docs/api.yml
 ```
-## All questions and answers are here:
 
-```sh
-https://github.com/Eclisher/library-management/blob/oas-td2-std22007/docs/api.md
-```
 
 ### Warning: this may be an error as the repository is Private
