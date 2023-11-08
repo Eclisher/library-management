@@ -102,6 +102,51 @@ paths:
                   type: string
                   example: "The book with id=1 removed authors are ordered by name"
 
+  /books/{bookId}/topics/{topicId}:
+    put:
+      tags:
+        - Books
+      summary: Modify topic for a book by Id
+      operationId: updateTopicForBook
+      parameters:
+        - in: path
+          name: bookId
+          description: Id of book
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: topicId
+          description: Id of topic
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Book updated topic
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Book'
+  /books/topics:
+    put:
+      tags:
+        - Books
+      summary: Modify topics for books by Id
+      operationId: updateBooksWithTopics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                $ref: '#/components/schemas/UpdateBookTopic'
+      responses:
+        200:
+          description: The updated book with author
+
           
   /authors:
     get:
@@ -236,7 +281,7 @@ paths:
   /topics:
     get:
       tags:
-        - "Topic"
+        - "Topics"
       summary: Get all topics
       description: The returned topics are ordered by name.
       operationId: getTopics
@@ -258,7 +303,7 @@ paths:
                   $ref: '#/components/schemas/Topic'   
     put:
       tags:
-        - "Topic"
+        - "Topics"
       summary: Create or update a list of topic
       operationId: crupdateTopic
       requestBody:
@@ -332,7 +377,17 @@ components:
           type: string
           format: date
 
-
+    UpdateBookTopic:
+      type: object
+      properties:
+        bookId:
+          type: string
+        topicId: 
+          type: string
+      required:
+        - "bookId"
+        - "authorId"
+        
     Book:
       type: object
       allOf:
