@@ -460,3 +460,19 @@ components:
         authorId:
           type: string
           description: ID of the author            
+  parameters:
+    queryPagination:
+      name: page
+      in: query
+      description: Page number for pagination
+      required: false
+      schema:
+        type: integer
+        default: 1
+    pathPagination:
+      name: page
+      in: path
+      description: Page number for pagination
+      required: true
+      schema:
+        type: integer             
