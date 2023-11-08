@@ -233,8 +233,88 @@ paths:
               schema: 
                 items:
                   $ref: '#/components/schemas/Book'
+  /topics:
+    get:
+      tags:
+        - "Topic"
+      summary: Get all topics
+      description: The returned topics are ordered by name.
+      operationId: getTopics
+      parameters:
+        - in: query
+          name: name
+          description: Filter return topic by given name
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The list of filtered topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'   
+    put:
+      tags:
+        - "Topic"
+      summary: Create or update a list of topic
+      operationId: crupdateTopic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CrupdateTopic'
+      responses:
+        200:
+          description: The list of created or updated topic
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+
+    delete:
+      tags:
+        - "Topics"
+      summary: Delete topics by ID
+      operationId: deleteTopics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        200:
+          description: List of topics is deleted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'                                                   
 components:
   schemas:
+    CrupdateTopic:
+      type: object
+      properties:
+        topicName:
+          type: string
+          example: 'Romance'
+
+    Topic:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+        - $ref: '#/components/schemas/CrupdateTopic'    
     CrupdateBook:
       type: object
       properties:
