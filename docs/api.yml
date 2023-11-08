@@ -427,7 +427,30 @@ components:
             - Male
             - Female
             - Female
-
+    AuthorTopics:
+      type: object
+      allOf:
+        - allOf:
+            - $ref: '#/components/schemas/CrupdateAuthor'
+      properties:
+        topic:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic' 
+    CrupdateAuthor:
+      type: object
+      properties:
+        authorName:
+          type: string
+          example: John Doe
+        sex:
+          $ref: '#/components/schemas/Sex'
+    Sex:
+      type: string
+      enum:
+        - M
+        - F
+                               
     UpdateBookAuthor:
       type: object
       properties:
