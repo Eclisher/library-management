@@ -7,7 +7,7 @@ https://library.com
 ## Here's the SwaggerUi url to view the Swagger UI code
 
 ```sh
-https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Eclisher/library-management/oas-td2-alt-std22007/docs/api.yml
+https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Eclisher/library-management/oas-td3-std22007/docs/api.yml
 ```
 
 
