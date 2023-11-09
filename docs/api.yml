@@ -219,8 +219,8 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/SpecificResponse200'
-          example:
-            $ref: '#/components/schemas/author'
+          examples:
+            - $ref: '#/components/schemas/author'
         400:
           $ref: '#/components/responses/SpecificResponse400'
         403:
@@ -607,7 +607,8 @@ components:
                     message:
                       type: string
                 body:
-                  type: object    
+                  type: object  
+
       SpecificResponse200:
         description: Page successfully processed
         content:
@@ -625,7 +626,7 @@ components:
                           default: "Success"
                     body:
                       oneOf:
-                        -  $ref: '#/components/schemas/Book'
+                        - $ref: '#/components/schemas/Book'
                         -  $ref: '#/components/schemas/author'
                         
                       
@@ -645,7 +646,7 @@ components:
                       properties:
                         code:
                           default: 400
-                        message:
+                        message:  
                           default: "Bad Request"
 
       SpecificResponse403:
