@@ -445,12 +445,6 @@ paths:
           $ref: '#/components/responses/Forbidden_403'
         500:
           $ref: '#/components/responses/InternalServerError_500'
-
-    post:
-      tags:
-        - "Visitors"
-      summary: G
-
 components:
   schemas:
     CrupdateTopic:
