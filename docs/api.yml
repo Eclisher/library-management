@@ -411,7 +411,46 @@ paths:
                 items:
                   allOf:
                     - $ref: '#/components/schemas/author'
-                    - $ref: '#/components/schemas/Topic'                                                                   
+                    - $ref: '#/components/schemas/Topic'    
+
+
+  /visitors:
+    get:
+      tags:
+        - "Visitors"
+      summary: Get all visitors
+      description: get all list of visitors
+      operationId: getVisitors
+      parameters:
+        - in: query
+          name: visitorName
+          description: Filter  visitors by name
+          required: false
+          schema:
+            type: string
+
+        - $ref: '#/components/parameters/queryPagination'
+        - in: query
+          name:  pageSize
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/VisitotList_200' 
+        400:
+          $ref: '#/components/responses/BadRequest_400'
+        403:
+          $ref: '#/components/responses/Forbidden_403'
+        500:
+          $ref: '#/components/responses/InternalServerError_500'
+
+    post:
+      tags:
+        - "Visitors"
+      summary: G
+
 components:
   schemas:
     CrupdateTopic:
@@ -479,6 +518,23 @@ components:
             - Male
             - Female
             - Female
+    Visitor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the visitor
+          example: id1
+        name:
+          type: string
+          description: Name of the visitor
+          example: Rakoto
+        reference:
+          type: string
+          description: Reference of the visitor
+
+
+
     AuthorTopics:
       type: object
       allOf:
@@ -562,6 +618,14 @@ components:
           $ref: '#/components/schemas/ResponcesStatus'
         body:
           type: object
+    VisitorListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+        - properties:
+            body:
+              type:  array
+              items:
+                $ref: '#/components/schemas/Visitor'
 
     BookListBody:
       allOf:
@@ -644,6 +708,13 @@ components:
                       type: string
                 body:
                   type: object  
+      VisitotList_200:
+        description: List of visitor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitorListBody'
+
       BookList_200:
         description: list of book
         content:
