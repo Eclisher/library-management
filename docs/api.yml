@@ -603,7 +603,7 @@ components:
         -  $ref: '#/components/schemas/ResponseBodyTemplate'
       example:
         status:
-          code: 5000
+          code: 500
           message: Internal Sever Error
         body: { }    
 
