@@ -52,11 +52,9 @@ paths:
 
       responses:
         200:
-          $ref: '#/components/responses/SpecificResponse200'
-          example:
-              $ref: '#/components/schemas/Book'
+          $ref: '#/components/responses/BookList_200'
         400:
-          $ref: '#/components/responses/SpecificResponse400'
+          $ref: '#/components/responses'
         403:
           $ref: '#/components/responses/SpecificResponse403'
         500:
@@ -130,7 +128,7 @@ paths:
                   description: JSON file containing book data
       responses:
         200:
-          $ref: '#/components/responses/SpecificResponse200'               
+          $ref: '#/components/responses/BookList_200'               
 
   /books/{bookId}/topics/{topicId}:
     put:
@@ -218,15 +216,13 @@ paths:
             type: integer
       responses:
         200:
-          $ref: '#/components/responses/SpecificResponse200'
-          examples:
-            - $ref: '#/components/schemas/author'
+          $ref: '#/components/responses/AuthorList_200'
         400:
-          $ref: '#/components/responses/SpecificResponse400'
+          $ref: '#/components/responses/BadRequest_400'
         403:
-          $ref: '#/components/responses/SpecificResponse403'
+          $ref: '#/components/responses/Forbidden_403'
         500:
-          $ref: '#/components/responses/SpecificResponse500'            
+          $ref: '#/components/responses/InternalServerError_500'            
     
 
     put:
@@ -244,13 +240,7 @@ paths:
 
       responses:
         200:
-          description: list of created or updates authors 
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/author'        
+          $ref: '#/components/schemas/AuthorListBody'      
     delete:
       tags:
         - "Authors"
@@ -265,14 +255,8 @@ paths:
                 type: string
 
       responses:
-        200: 
-          description: List of the Authors is deleted
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/author'          
+        200:
+          $ref: '#/components/schemas/AuthorListBody'              
 
   /books/{bookId}/authors/{authorId}:
     put: 
@@ -292,14 +276,7 @@ paths:
           required: true
       responses:
         200:
-          description: the Update book
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  $ref: '#/components/schemas/Book'
-
+          $ref: '#/components/responses/BookList_200'    
   /books/authors:
     put:
       tags:
@@ -314,12 +291,7 @@ paths:
                 $ref: '#/components/schemas/Book'
       responses:
         200:
-          description: The Update the books by Authors
-          content:
-            application/json:
-              schema: 
-                items:
-                  $ref: '#/components/schemas/Book'
+          $ref: '#/components/responses/BookList_200' 
   /authors/import:
     post:
       tags:
@@ -346,7 +318,7 @@ paths:
                   description: JSON file containing author data
       responses:
         200:
-          $ref: '#/components/responses/SpecificResponse200'      
+          $ref: '#/components/responses/BookList_200'      
               
   /topics:
     get:
@@ -573,6 +545,70 @@ components:
         idAuthor:
           type: string
 
+    ResponcesStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: 'Succes'
+
+    ResponseBodyTemplate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ResponcesStatus'
+        body:
+          type: object
+
+    BookListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/Book'
+    AuthorListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/author'
+
+
+    BadRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+      example:
+        status:
+          code: 400
+          message: Bad Request
+        body: { }
+    Forbidden:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+      example: 
+        status:
+          code: 403
+          message: Forbidden
+        body: { }  
+
+    InternalServerError:
+      allOf:
+        -  $ref: '#/components/schemas/ResponseBodyTemplate'
+      example:
+        status:
+          code: 5000
+          message: Internal Sever Error
+        body: { }    
+
+
+        
   parameters:
     queryPagination:
       name: page
@@ -608,28 +644,40 @@ components:
                       type: string
                 body:
                   type: object  
-
-      SpecificResponse200:
-        description: Page successfully processed
+      BookList_200:
+        description: list of book
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/responses/DefaultResponse'
-                - type: object
-                - properties:
-                    status:
-                      properties:
-                        code:
-                          default: 200
-                        message:
-                          default: "Success"
-                    body:
-                      oneOf:
-                        - $ref: '#/components/schemas/Book'
-                        -  $ref: '#/components/schemas/author'
-                        
-                      
+              $ref: '#/components/schemas/BookListBody'
+      AuthorList_200:
+        description: list of author
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorListBody'
+      BadRequest_400:
+        description: Bad Request  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadRequestBody'
+      InternalServerError_500:
+        description: INteranl Server  Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalServerError' 
+      Forbidden_403:
+        description:  Forbidden
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/Forbidden_403'
+
+              
+
+
 
 
 
@@ -648,6 +696,9 @@ components:
                           default: 400
                         message:  
                           default: "Bad Request"
+                    body:
+                      example: { }
+
 
       SpecificResponse403:
         description: Forbidden
@@ -665,7 +716,8 @@ components:
                           default: 403
                         message:
                           default: "Forbidden"
-
+                    body:
+                      example: {}
       SpecificResponse500:
         description: Internal Server Error
         content:
@@ -681,4 +733,5 @@ components:
                           default: 500
                         message:
                           default: "Internal Server Error"                                                                 
-                                         
+                    body:
+                      example: {}
