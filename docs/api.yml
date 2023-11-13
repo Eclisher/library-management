@@ -56,9 +56,9 @@ paths:
         400:
           $ref: '#/components/responses'
         403:
-          $ref: '#/components/responses/SpecificResponse403'
+          $ref: '#/components/responses/Forbidden_403'
         500:
-          $ref: '#/components/responses/SpecificResponse500'            
+          $ref: '#/components/responses/InternalServerError_500'            
 
     put:
       tags:
@@ -686,22 +686,6 @@ components:
         type: integer
 
   responses:
-      DefaultResponse:
-        description: Default responses
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: object
-                  properties:
-                    code:
-                      type: integer
-                    message:
-                      type: string
-                body:
-                  type: object  
       VisitotList_200:
         description: List of visitor
         content:
@@ -738,65 +722,4 @@ components:
         content:
           application/json:
             schema:
-              $ref: '#/components/responses/Forbidden_403'
-
-              
-
-
-
-
-
-      SpecificResponse400:
-        description: Bad Request
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/responses/DefaultResponse'
-                - type: object
-                - properties:
-                    status:
-                      properties:
-                        code:
-                          default: 400
-                        message:  
-                          default: "Bad Request"
-                    body:
-                      example: { }
-
-
-      SpecificResponse403:
-        description: Forbidden
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/responses/DefaultResponse'
-                - type: object
-                - properties:
-                    status:
-                      type: object
-                      properties:
-                        code:
-                          default: 403
-                        message:
-                          default: "Forbidden"
-                    body:
-                      example: {}
-      SpecificResponse500:
-        description: Internal Server Error
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/responses/DefaultResponse'
-                - type: object
-                - properties:
-                    status:
-                      properties:
-                        code:
-                          default: 500
-                        message:
-                          default: "Internal Server Error"                                                                 
-                    body:
-                      example: {}
+              $ref: '#/components/schemas/Forbidden'
