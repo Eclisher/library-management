@@ -515,10 +515,33 @@ paths:
           $ref: '#/components/responses/Forbidden_403'
         500:
           $ref: '#/components/responses/InternalServerError_500'                
+  /books/borrowed:
+    get:
+      tags:
+        - "Books"
+      summary:  get a list of borrowed books
+      operationId:  geBorrowedBooks
+      
+      responses:
+        200: 
+          $ref: '#/components/responses/BookList_200'
+        400:
+          $ref: '#/components/responses/BadRequest_400'
+        403:
+          $ref: '#/components/responses/Forbidden_403'
+        500:
+          $ref: '#/components/responses/InternalServerError_500'
 
-
-
-
+  /books/availabe:
+    get:
+      tags:
+        - "Books"
+      summary: get all book avalaible
+      description: Get a list of all book avalaible
+      operationId: GetAllBookAvalaible
+      responses:
+        200:
+          $ref: '#/components/responses/BookWithAvalaibility'
            
 components:
   schemas:
@@ -668,6 +691,15 @@ components:
         idAuthor:
           type: string
 
+    BookWithAvailability:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Book'
+        - properties:
+            isAvailable:
+              type: boolean
+              description: Indicates if the book is available for borrowing      
+
     ResponcesStatus:
       type: object
       properties:
@@ -685,6 +717,17 @@ components:
           $ref: '#/components/schemas/ResponcesStatus'
         body:
           type: object
+
+    Book_With_AvailabilityBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/BookWithAvailability' 
+
+              
     VisitorListBody:
       allOf:
         - $ref: '#/components/schemas/ResponseBodyTemplate'
@@ -710,8 +753,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/author'
-
-
     BadRequestBody:
       allOf:
         - $ref: '#/components/schemas/ResponseBodyTemplate'
@@ -796,3 +837,9 @@ components:
           application/json:
             schema:
               $ref: '#/components/schemas/Forbidden'
+      BookWithAvalaibility:
+        description: List a book available
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book_With_AvailabilityBody'
