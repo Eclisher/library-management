@@ -5,9 +5,13 @@ info:
   description: STD22007
 servers:
   - url: https://library.com
+security:
+  - OAuth2: ['read:books', 'read:authors']  
 paths:
   /books:
     get:
+      security:
+      - OAuth2: ['read:books']
       tags:
         - "Books"
       summary: Get all books
@@ -48,10 +52,7 @@ paths:
           required: false
           schema: 
             type: integer
-            default: 50 #valeur par défaut pour pageSize
-            
-      security:
-        - OAuth2: ['read:pets']      
+            default: 50 #valeur par défaut pour pageSize   
       responses:
         200:
           $ref: '#/components/responses/BookList_200'
@@ -63,6 +64,8 @@ paths:
           $ref: '#/components/responses/InternalServerError_500'            
 
     put:
+      security:
+      - OAuth2: ['admin']
       tags:
         - "Books"
       summary: Create or update a list of books
@@ -196,6 +199,8 @@ paths:
           
   /authors:
     get:
+      security:
+        - OAuth2: ['read:authors']
       tags:
         - "Authors"
   #TODO2: complete GET (can be filtered by name) - PUT - DELETE
@@ -228,6 +233,8 @@ paths:
     
 
     put:
+      security:
+      - OAuth2: ['admin']
       tags:
         - "Authors"
       summary: Create or update authors 
@@ -318,6 +325,8 @@ paths:
                   type: string
                   format: binary
                   description: JSON file containing author data
+      security:
+        - OAuth2: ['write:pets']                  
       responses:
         200:
           $ref: '#/components/responses/BookList_200'      
@@ -471,7 +480,9 @@ paths:
                     type: string
                     description: ID of book  to borrow
                     required:
-                      - bookId           ggi         
+                      - bookId
+        security:
+          - OAuth2: ['admin']                      
         responses:
           200: 
             $ref: '#/components/responses/BookList_200'
@@ -508,6 +519,8 @@ paths:
                   description: ID of the book to return
               required:
                 - bookId
+      security:
+      - OAuth2: ['admin']          
       responses:
         200: 
           $ref: '#/components/responses/BookList_200'
@@ -536,6 +549,8 @@ paths:
 
   /books/availabe:
     get:
+      security:
+        - OAuth2: ['read:books']
       tags:
         - "Books"
       summary: get all book avalaible
@@ -646,7 +661,6 @@ components:
           type: string
           enum:
             - Male
-            - Female
             - Female
     Visitor:
       type: object
