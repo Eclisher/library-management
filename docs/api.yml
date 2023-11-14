@@ -49,7 +49,9 @@ paths:
           schema: 
             type: integer
             default: 50 #valeur par défaut pour pageSize
-
+            
+      security:
+        - OAuth2: ['read:pets']      
       responses:
         200:
           $ref: '#/components/responses/BookList_200'
@@ -542,7 +544,43 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/BookWithAvalaibility'
-           
+
+  /visitors/{visitorId}/activities:
+    get:
+      tags:
+        - "Visitors"
+      summary: Get visitor activities
+      operationId: getVisitorActivities
+      parameters:
+        - in: path
+          name: visitorId
+          description: ID of the visitor
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          description: Start date for filtering activities
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: endDate
+          description: End date for filtering activities
+          required: true
+          schema:
+            type: string
+            format: date-time  
+      responses:
+        200: 
+          $ref: '#/components/responses/VisitorAcitivity_Responses'
+        400:
+          $ref: '#/components/responses/BadRequest_400'
+        403:
+          $ref: '#/components/responses/Forbidden_403'
+        500:
+          $ref: '#/components/responses/InternalServerError_500'  
 components:
   schemas:
     CrupdateTopic:
@@ -699,6 +737,21 @@ components:
             isAvailable:
               type: boolean
               description: Indicates if the book is available for borrowing      
+    VisitorActivity:
+          type: object
+          properties:
+            bookId:
+              type: string
+              description: ID of the book involved in the activity
+            activityType:
+              type: string
+              description: Type of activity (e.g., "borrow", "return")
+              example:
+                borrow
+            activityDate:
+              type: string
+              format: date-time
+              description: Date and time of the activity
 
     ResponcesStatus:
       type: object
@@ -717,7 +770,14 @@ components:
           $ref: '#/components/schemas/ResponcesStatus'
         body:
           type: object
-
+    Visitor_Activity:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBodyTemplate'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/VisitorActivity'
     Book_With_AvailabilityBody:
       allOf:
         - $ref: '#/components/schemas/ResponseBodyTemplate'
@@ -843,3 +903,24 @@ components:
           application/json:
             schema:
               $ref: '#/components/schemas/Book_With_AvailabilityBody'
+      VisitorAcitivity_Responses:
+        description: List of visitor activities
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Visitor_Activity'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        authorizationCode:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          tokenUrl: https://example.com/api/oauth/token
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets              
