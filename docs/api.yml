@@ -445,6 +445,81 @@ paths:
           $ref: '#/components/responses/Forbidden_403'
         500:
           $ref: '#/components/responses/InternalServerError_500'
+
+  /visitors/{visitorId}/borrow:
+      post:
+        tags:
+          - "Visitors"
+        summary: Borrow  a book
+        operationId: borrowBook
+        parameters: 
+          - in: path
+            name: visitorId
+            description: ID of the  visitor
+            required: true
+            schema:
+              type: string
+        requestBody: 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookId:
+                    type: string
+                    description: ID of book  to borrow
+                    required:
+                      - bookId           ggi         
+        responses:
+          200: 
+            $ref: '#/components/responses/BookList_200'
+          400:
+            $ref: '#/components/responses/BadRequest_400'
+          403:
+            $ref: '#/components/responses/Forbidden_403'
+          500:
+            $ref: '#/components/responses/InternalServerError_500'                                  
+
+
+  /visitors/{visitorId}/return:
+    post:
+      tags:
+        - "Visitors"
+      summary: Return a borrowed book
+      operationId: returnBook
+      parameters:
+        - in: path
+          name: visitorId
+          description: ID of the visitor
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookId:
+                  type: string
+                  description: ID of the book to return
+              required:
+                - bookId
+      responses:
+        200: 
+          $ref: '#/components/responses/BookList_200'
+        400:
+          $ref: '#/components/responses/BadRequest_400'
+        403:
+          $ref: '#/components/responses/Forbidden_403'
+        500:
+          $ref: '#/components/responses/InternalServerError_500'                
+
+
+
+
+           
 components:
   schemas:
     CrupdateTopic:
@@ -526,9 +601,7 @@ components:
         reference:
           type: string
           description: Reference of the visitor
-
-
-
+          example: REF_for-id1
     AuthorTopics:
       type: object
       allOf:
